@@ -6,6 +6,7 @@ import {convertPatientForServer, convertStatusForServer} from '../util/Realm';
 // Must set the fetchUrl to the server's IP Address and Port
 const fetchUrl = config.fetchUrl;
 
+
 // Server endpoint: post /patient
 export function createPatient(patient) {
   return fetch(fetchUrl + '/patient', {
@@ -43,8 +44,7 @@ export function updateStatus(statusObj) {
     body: JSON.stringify({
       status: copy
     })
-  }).then(response => response.json())
-    .then(json => {
+  }).then(json => {
       // status is false if the Network connection went through but there was
       // some kind of error when processing the request. Throwing an error here
       // will lead to patient.needToUpload being marked as true
@@ -150,7 +150,6 @@ export function updateTriage(update) {
       triage: update
     })
   })
-    .then(response => response.json())
     .then(json => {
       if (!json.status) {
         throw new Error(json.error);
@@ -192,6 +191,20 @@ export function getPatient(patientKey) {
       return Promise.resolve(patient);
     }).catch(err => {
       return Promise.reject(err);
+    });
+}
+
+export function getPatients(){
+  return fetch(fetchUrl + '/patients/0')
+    .then(response => response.json())
+    .then(obj => {
+      if(obj.error){
+        throw new Error(obj.error);
+      }
+      const patients = obj.patients;
+      return Promise.resolve(patients);
+    }).catch(err => {
+      Promise.reject(err);
     });
 }
 
@@ -252,6 +265,7 @@ export function getUpdatedPatients(lastSynced) {
   return fetch(fetchUrl + '/patients/' + lastSynced)
     .then(response => response.json())
     .then(json => {
+      console.log("INside server Data Get updated patients");
       if(json.error) {
         throw new Error(json.error);
       }
@@ -355,6 +369,7 @@ export function getUpdatedMedications(lastSynced) {
     });
 }
 
+// Server endpoint: put /credentials/check
 export function checkCredentials(credentials) {
   return fetch(fetchUrl + '/credentials/check', {
     method: 'PUT',
@@ -379,4 +394,145 @@ export function checkCredentials(credentials) {
     }).catch(err => {
       return Promise.reject(err);
     });
+}
+
+//TODO: addCredentials() put /credentials/add
+
+// Server endpoint: put /lab-queue/add
+export function enqueueLabRequest(labRequest) {
+  return fetch(fetchUrl + '/lab-queue/add', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      labRequest: labRequest
+    })
+  }).then(response => response.json())
+    .then(json => {
+      if(json.error) {
+        throw new Error(json.error);
+      }
+      return Promise.resolve(true);
+    }).catch(err => {
+      return Promise.reject(err);
+    });
+}
+
+// Server endpoint: put /lab-queue/remove
+export function dequeueLabRequest(labRequest) {
+  return fetch(fetchUrl + '/lab-queue/remove', {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      labRequest: labRequest
+    })
+  }).then(response => response.json())
+    .then(json => {
+      if(json.error) {
+        throw new Error(json.error);
+      }
+      return Promise.resolve(true);
+    }).catch(err => {
+      return Promise.reject(err);
+    });
+}
+
+// Server endpoint: put /lab-queue/complete
+export function markLabRequestComplete(key) {
+  return fetch(fetchUrl + '/lab-queue/' + key + 'complete', {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+    })
+  }).then(response => response.json())
+    .then(json => {
+      if(json.error) {
+        throw new Error(json.error);
+      }
+      return Promise.resolve(true);
+    }).catch(err => {
+      return Promise.reject(err);
+    });
+}
+
+// Server endpoint: put /lab-queue/incomplete
+export function markLabRequestIncomplete(key) {
+  return fetch(fetchUrl + '/lab-queue/' + key + 'incomplete', {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+    })
+  }).then(response => response.json())
+    .then(json => {
+      if(json.error) {
+        throw new Error(json.error);
+      }
+      return Promise.resolve(true);
+    }).catch(err => {
+      return Promise.reject(err);
+    });
+}
+
+// Server endpoint: put /lab-queue/clear
+export function clearLabQueue() {
+  return fetch(fetchUrl + '/lab-queue/clear', {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+    })
+  }).then(response => response.json())
+    .then(json => {
+      if(json.error) {
+        throw new Error(json.error);
+      }
+      return Promise.resolve(true);
+    }).catch(err => {
+      return Promise.reject(err);
+    });
+}
+
+// Server endpoint: get /lab-queue/:timestamp
+export function getUpdatedLabRequests(lastSynced) {
+  return fetch(fetchUrl + '/lab-queue/' + lastSynced)
+    .then(response => response.json())
+    .then(json => {
+      if(json.error) {
+        throw new Error(json.error);
+      }
+      const labRequests = json.labRequests;
+      return Promise.resolve(labRequests);
+    }).catch(err => {
+      return Promise.reject(err);
+    });
+}
+
+export function updateLabRequests(labRequests) {
+  return fetch(fetchUrl + '/lab-queue/update', {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      labRequests: labRequests
+    }),
+  }).then(() => {
+    return Promise.resolve(true);
+  }).catch(err => {
+    return Promise.reject(err);
+  });
 }

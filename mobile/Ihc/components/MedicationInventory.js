@@ -23,9 +23,8 @@ export default class MedicationInventory extends Component<{}> {
 
   constructor(props) {
     super(props);
-    this.tableHeaders = ['Drug Name', 'Quantity', 'Dosage', 'Units', 'Notes', ' ']; //blank header for 'x' column
+    this.tableHeaders = ['Drug Name', 'Quantity', 'Dosage', 'Units', 'Notes'];
     this.rowNum = 0;
-
     const formValues = {drugName: null, quantity: null, dosage: null, units: null, comments: null};
     this.state = { showModal: false, medicationKey: null, formOptions: this.addModalFormOptions, formValues: formValues};
   }
@@ -108,6 +107,7 @@ export default class MedicationInventory extends Component<{}> {
     this.setState({ showModal: true, medicationKey: medicationKey, formOptions: this.editModalFormOptions, formValues: formValues });
   }
 
+
   openAddModal = () => {
     const formValues = {drugName: null, quantity: null, dosage: null, units: null, comments: null};
     this.setState({ showModal: true, medicationKey: null, formOptions: this.addModalFormOptions, formValues: formValues });
@@ -179,9 +179,6 @@ export default class MedicationInventory extends Component<{}> {
       <Row key={`row${this.rowNum++}`} style={styles.rowContainer}
         onPress={() => this.openEditModal(medication)}>
         {cols}
-        <Button style={styles.deleteButton}
-          onPress = {() => this.deleteMedication(medication)}
-          text='x' />
       </Row>
     );
   }
@@ -227,11 +224,18 @@ export default class MedicationInventory extends Component<{}> {
     );
   }
 }
-
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+   headerContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 25,
+    textAlign: 'center',
+},
   rowContainer: {
     borderWidth: 1,
     flex: 1,
@@ -260,8 +264,11 @@ export const styles = StyleSheet.create({
     width: 70,
   },
   buttonContainer: {
-    width: 150,
-    height: 40,
+    position: 'relative', 
+    top: 38, 
+    left: 550, 
+    width: 200,
+    height: 30,
   },
   deleteButton: {
     width: 20,
