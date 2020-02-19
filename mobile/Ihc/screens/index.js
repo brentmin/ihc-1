@@ -1,6 +1,7 @@
 import { Navigation } from 'react-native-navigation';
 
 import SigninScreen from './SigninScreen';
+import WelcomeScreen from './WelcomeScreen';
 import TriagePageNew from './TriagePageNew';
 import MedicationScreen from './MedicationScreen';
 import MedicationUpdateScreen from './MedicationUpdateScreen';
@@ -11,9 +12,10 @@ import TriageHistory from './TriageHistory';
 import TestServerScreen from './TestServerScreen';
 import MedicationInventoryScreen from './MedicationInventoryScreen';
 import LoginScreen from './LoginScreen';
+import PatientHomeScreen from './PatientHomeScreen';
 
-import newPatientList from './newPatientList.js';
-import newPatientCheckIn from './newPatientCheckIn';
+import PatientList from './PatientList.js';
+import PatientCheckIn from './PatientCheckIn.js';
 
 
 // register all screens of the app (including internal ones)
@@ -30,10 +32,11 @@ export function registerScreens(store, Provider) {
   Navigation.registerComponent('Ihc.MedicationUpdateScreen', () => MedicationUpdateScreen, store, Provider);
   Navigation.registerComponent('Ihc.SoapScreen', () => SoapScreen, store, Provider);
   Navigation.registerComponent('Ihc.TriageScreen', () => TriageScreen, store, Provider);
+  Navigation.registerComponent('Ihc.TriageHistory', () => TriageHistory, store, Provider);
   Navigation.registerComponent('Ihc.PatientHistoryScreen', () => PatientHistoryScreen, store, Provider);
   Navigation.registerComponent('Ihc.TestServerScreen', () => TestServerScreen);
   Navigation.registerComponent('Ihc.MedicationInventoryScreen', () => MedicationInventoryScreen, store, Provider);
   Navigation.registerComponent('Ihc.LoginScreen', () => LoginScreen, store, Provider);
-  Navigation.registerComponent('Ihc.newPatientList', () => newPatientList, store, Provider);
-  Navigation.registerComponent('Ihc.newPatientCheckIn', () => newPatientCheckIn, store, Provider);
+  Navigation.registerComponent('Ihc.PatientList', () => PatientList, store, Provider);
+  Navigation.registerComponent('Ihc.PatientCheckIn', () => PatientCheckIn, store, Provider);
 }
